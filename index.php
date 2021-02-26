@@ -47,12 +47,19 @@ try {
     $prenom = "Jean-Eude-Christian-Jojo";
     $last = $conn->lastInsertId();
     $sql = $conn->prepare("
-        UPDATE exo_192.user SET prenom = :prenom WHERE :last
+        UPDATE exo_192.user SET prenom = :prenom WHERE id = :last
     ");
 
     $sql->bindParam(":prenom", $prenom);
     $sql->bindParam(":last", $last);
     $sql->execute();
+
+    if ($sql->rowCount() > 0){
+        echo "utilisateur modifié";
+    }
+    else{
+        echo "utilisateur pas modifié";
+    }
 }
 
 catch (PDOException $e){
