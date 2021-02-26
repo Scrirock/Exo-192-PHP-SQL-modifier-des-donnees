@@ -9,12 +9,55 @@
  */
 
 // TODO Votre code ici.
+
+$server = "localhost";
+$db = "exo_192";
+$user = "root";
+$pass = "";
+
 try {
-    ...
+    $conn = new PDO("mysql:host=$server;dbname=$db;charset=utf8", $user, $pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $nom = "Bidule";
+    $prenom = "Truc";
+    $rue = "Sellekébelle";
+    $numero = 8;
+    $codePostal = 4587;
+    $ville = "laplussemieux";
+    $pays = "letrobo";
+    $mail = "mail@gmail.com";
+
+    $sql = $conn->prepare("
+        INSERT INTO exo_192.user (nom, prenom, rue, numero, code_postal, ville, pays, mail)
+        VALUES (:nom, :prenom, :rue, :numero, :codePostal, :ville, :pays, :mail)
+    ");
+
+    $sql->bindParam(":nom", $nom);
+    $sql->bindParam(":prenom", $prenom);
+    $sql->bindParam(":rue", $rue);
+    $sql->bindParam(":numero", $numero);
+    $sql->bindParam(":codePostal", $codePostal);
+    $sql->bindParam(":ville", $ville);
+    $sql->bindParam(":pays", $pays);
+    $sql->bindParam(":mail", $mail);
+
+    $sql->execute();
+
+    $prenom = "Jean-Eude-Christian-Jojo";
+    $last = $conn->lastInsertId();
+    $sql = $conn->prepare("
+        UPDATE exo_192.user SET prenom = :prenom WHERE :last
+    ");
+
+    $sql->bindParam(":prenom", $prenom);
+    $sql->bindParam(":last", $last);
+    $sql->execute();
 }
-catch...
 
-
+catch (PDOException $e){
+    echo $e->getMessage();
+}
 
 /**
  * Théorie
